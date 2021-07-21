@@ -14,8 +14,8 @@
                 </li>
                 <li class="nav-item mx-5">
                 {% if app.user %}
-					{{ app.user.email }}
-					<a href="{{ path('app_logout') }}" class="btn btn-success"> Se déconnecter</a>
+					<a href="{{ path('profile_index') }}" class="btn btn-success">Bienvenue {{ app.user.username }}</a>
+					<a href="{{ path('app_logout') }}" class="btn btn-success mx-5"> Se déconnecter</a>
 				{% else %}
 				<a class="btn btn-success" href="{{ path('app_register') }}" class="btn btn-success">S'inscrire</a>
 					<a href="{{ path('app_login') }}" class="btn btn-success"> Se connecter</a>

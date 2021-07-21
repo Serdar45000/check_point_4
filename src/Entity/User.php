@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Post;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -25,6 +26,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private string $email;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private string $username;
 
     /**
      * @ORM\Column(type="json")
@@ -58,15 +64,6 @@ class User implements UserInterface
      */
     private Collection $posts;
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
-    }
 
     /**
      * @see UserInterface
@@ -74,7 +71,6 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -147,6 +143,26 @@ class User implements UserInterface
                 $post->setUser($this);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of username
+     */
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set the value of username
+     *
+     * @return  self
+     */
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier profil{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Modifier profil</h1>
+
+    {{ include('profile/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    <div class="d-flex justify-content-end">
+        <a href="{{ path('profile_index') }}" class="btn btn-success mt-3">Retour profil</a>
+    </div>
+</div>
+{% endblock %}
