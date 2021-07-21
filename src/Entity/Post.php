@@ -5,6 +5,9 @@ namespace App\Entity;
 use DateTime;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
