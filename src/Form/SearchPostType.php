@@ -14,7 +14,7 @@ class SearchPostType extends AbstractType
         $builder
             ->setMethod('GET')
             ->add('title', null, [
-                'label' => 'Recherche article :',
+                'label' => false,
             ])
         ;
     }
