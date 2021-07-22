@@ -1,5 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
-
-{% block body %}{% endblock %}
+{% block body %}
+	<div class="container">
+		<h1 class="text-center mt-5">Les derniers articles</h1>
+		<div class="row justify-content-center">
+			{% for post in posts %}
+				<div class="col-sm-6">
+					<div class="card text-center m-2 bg-dark">
+						<h5 class="card-header font-weight-bold bg-success"><i class="bi bi-stars"></i> {{ post.title }} </h5>
+					    <img class="align-self-center mt-2 h-25 rounded" src="">
+					<div class="card-body">
+						<p class="text-justify text-light float-start">{{ post.description|truncate(200) }}</p>
+					</div>
+						<a href="{{ path("post_show", {'id': post.id}) }}" class="btn btn-success"><i class="bi bi-eye-fill"></i> Voir post</a>
+				</div>
+			</div>
+		{% else %}
+			Aucun article trouvé.
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
