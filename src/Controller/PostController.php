@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Form\PostType;
 use App\Entity\Comment;
 use App\Form\CommentType;
+use App\Entity\SearchPost;
+use App\Form\SearchPostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +25,18 @@ class PostController extends AbstractController
     /**
      * @Route("/", name="post_index", methods={"GET"})
      */
-    public function index(PostRepository $postRepository): Response
+    public function index(Request $request, PostRepository $postRepository): Response
     {
+        $searchPost = new SearchPost();
+        $form = $this->createForm(SearchPostType::class, $searchPost);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $posts = $postRepository->findBySearch($searchPost);
+        }
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $posts ?? $postRepository->findAll(),
+            'form' => $form->createView(),
         ]);
     }
 
