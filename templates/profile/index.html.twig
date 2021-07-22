@@ -15,19 +15,13 @@
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
             <tr>
-                <td>{{ user.email }}</td>
-                <td>{{ user.username }}</td>
+                <td>{{ app.user.email }}</td>
+                <td>{{ app.user.username }}</td>
                 <td>
-                    <a href="{{ path('profile_edit', {'id': user.id}) }}" class="btn btn-success">Modifier</a>
+                    <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="btn btn-success">Modifier</a>
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
         </tbody>
     </table>
 </div>
