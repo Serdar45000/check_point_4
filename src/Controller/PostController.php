@@ -6,7 +6,10 @@ use DateTime;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\PostType;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Repository\PostRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +27,32 @@ class PostController extends AbstractController
     {
         return $this->render('post/index.html.twig', [
             'posts' => $postRepository->findAll(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/{id}", name="post_show", methods={"GET", "POST"})
+     */
+    public function show(Request $request, EntityManagerInterface $entityManager, Post $post): Response
+    {
+        /** @var User */
+        $user = $this->getUser();
+        $comment = new Comment();
+        $formComment = $this->createForm(CommentType::class, $comment);
+        $formComment->handleRequest($request);
+        $comment->setPost($post);
+        if ($formComment->isSubmitted() && $formComment->isValid()) {
+                $comment->setUser($user);
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                $this->addFlash('success', 'Commentaire envoyé');
+                return $this->redirect($request->getUri());
+        }
+
+        return $this->render('post/show.html.twig', [
+            'post' => $post,
+            'formComment' => $formComment->createView(),
         ]);
     }
 
@@ -52,16 +81,6 @@ class PostController extends AbstractController
         return $this->render('post/new.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="post_show", methods={"GET"})
-     */
-    public function show(Post $post): Response
-    {
-        return $this->render('post/show.html.twig', [
-            'post' => $post,
         ]);
     }
 
