@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ post.title }}</td>
                 <td>{{ post.description }}</td>
-                <td>{{ post.image }}</td>
+                <td> <img src="{{ vich_uploader_asset(post, 'imageFile') }}" class="img-fluid" alt=""></td>
                 <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('post_show', {'id': post.id}) }}" class="btn btn-success m-2 w-100">Voir</a>

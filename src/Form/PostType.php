@@ -3,10 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Post;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PostType extends AbstractType
@@ -24,7 +25,15 @@ class PostType extends AbstractType
                     'rows' => '5',
                 ]
             ])
-            ->add('image')
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Image :',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'label_attr' => [
+                    'class' => 'form-label'
+                ]
+            ])
         ;
     }
 

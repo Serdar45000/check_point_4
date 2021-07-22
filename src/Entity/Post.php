@@ -4,13 +4,18 @@ namespace App\Entity;
 
 use DateTime;
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PostRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @Vich\Uploadable
  */
 class Post
 {
@@ -38,11 +43,6 @@ class Post
     private string $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $image;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private bool $isActive = true;
@@ -57,6 +57,30 @@ class Post
      * @ORM\OrderBy({"id" = "DESC"})
      */
     private Collection $comments;
+
+    /**
+    * @Vich\UploadableField(mapping="posts", fileNameProperty="image")
+    * @Assert\File(
+    *      maxSize = "2M",
+    *      mimeTypes = {
+    *              "image/jpg", "image/jpg",
+    *              "image/jpeg", "image/jpeg",
+    *              "image/png", "image/webp"},
+    * )
+    * @var File|null
+    */
+    private $imageFile;
+
+   /**
+    * @ORM\Column(type="string", length=255, nullable=true)
+    * @var string
+    */
+    private ?string $image = "";
+
+   /**
+    * @ORM\Column(type="datetime")
+    */
+    private DateTime $updatedAt;
 
     public function __construct()
     {
@@ -101,18 +125,6 @@ class Post
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -167,6 +179,40 @@ class Post
                 $comment->getPost();
             }
         }
+
+        return $this;
+    }
+
+    public function setImageFile(?File $image): self
+    {
+        $this->imageFile = $image;
+        $this->updatedAt = new DateTime('now');
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function getUpdatedAt(): ?DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
