@@ -6,21 +6,6 @@
 <div class="container">
     <h1>Nos articles</h1>
 
-    <div class="row mt-2 mb-2">
-        <div class="col-10"><i class="bi bi-exclamation-circle-fill"></i> Recherche article :
-        </div>
-    </div>
-    <div class="row mt-2 mb-2">
-        <div class="col-6">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        </div>
-        <div class="col-4">
-          <button class="btn btn-success text-white"><i class="bi bi-search text-white"></i> Rechercher</button>
-          {{ form_end(form) }}
-        </div>
-    </div>
-
     <table class="table">
         <thead>
             <tr class="bg-success text-white">
@@ -39,8 +24,8 @@
                 <td> <img src="{{ vich_uploader_asset(post, 'imageFile') }}" class="img-fluid" alt=""></td>
                 <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('post_show', {'id': post.id}) }}" class="btn btn-success m-2 w-100">Voir</a>
-                    <a href="{{ path('post_edit', {'id': post.id}) }}" class="btn btn-danger m-2 w-100">Modifier</a>
+                    <a href="{{ path('post_show', {'id': post.id}) }}" class="btn btn-success m-2 w-100"><i class="bi bi-eye-fill"></i> Voir</a>
+                    <a href="{{ path('post_edit', {'id': post.id}) }}" class="btn btn-danger m-2 w-100"><i class="bi bi-pencil-square"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -52,6 +37,9 @@
     </table>
     <div class="d-flex justify-content-end">
         <a href="{{ path('post_new') }}" class="btn btn-success">Nouvel article</a>
+    </div>
+    <div class="pagination d-flex justify-content-center">
+        {{ knp_pagination_render(posts) }}
     </div>
 </div>
 {% endblock %}
