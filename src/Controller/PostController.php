@@ -30,6 +30,32 @@ class PostController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/new", name="post_new", methods={"GET","POST"})
+     */
+    public function new(Request $request): Response
+    {
+        /** @var User */
+        $user = $this->getUser();
+        $post = new Post();
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post->setCreatedAt(new DateTime('now'));
+            $post->setUser($user);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('post_index');
+        }
+
+        return $this->render('post/new.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @Route("/{id}", name="post_show", methods={"GET", "POST"})
@@ -57,34 +83,6 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="post_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        /** @var User */
-        $user = $this->getUser();
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post->setCreatedAt(new DateTime('now'));
-            $post->setUser($user);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($post);
-            $entityManager->flush();
-            $this->addFlash('success', 'Votre article a bien été ajouté !');
-
-            return $this->redirectToRoute('post_index');
-        }
-
-        return $this->render('post/new.html.twig', [
-            'post' => $post,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Post $post): Response
@@ -94,7 +92,7 @@ class PostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Votre article a bien été modifié !');
+
             return $this->redirectToRoute('post_index');
         }
 
@@ -114,7 +112,7 @@ class PostController extends AbstractController
             $entityManager->remove($post);
             $entityManager->flush();
         }
-        $this->addFlash('danger', 'Votre article a bien été supprimé !');
+
         return $this->redirectToRoute('post_index');
     }
 }
