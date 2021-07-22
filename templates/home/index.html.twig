@@ -23,7 +23,7 @@
 				<div class="col-sm-6">
 					<div class="card text-center m-2 bg-dark">
 						<h5 class="card-header font-weight-bold bg-success"><i class="bi bi-stars"></i> {{ post.title }} </h5>
-					    <img class="align-self-center mt-2 h-25 rounded" src="">
+					    <img class="align-self-center mt-2 h-25 rounded" src="{{ vich_uploader_asset(post, 'imageFile') }}">
 					<div class="card-body">
 						<p class="text-justify text-light float-start">{{ post.description|truncate(200) }}</p>
 					</div>
